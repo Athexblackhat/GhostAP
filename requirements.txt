@@ -1,0 +1,17 @@
+#  GhostAP — Automated Evil Twin Attack Framework
+#  Developer: ATHEX BLACK HAT
+#  Version: 1.0.0
+
+aircrack-ng      >= 1.6     # monitor mode, scanning, deauth
+hostapd          >= 2.9     # fake access point creation
+dnsmasq          >= 2.80    # DHCP + DNS for captive portal
+python3          >= 3.8     # captive portal backend
+python3-pip      latest     # flask installation
+xterm            latest     # parallel process windows
+iptables         latest     # traffic redirection
+net-tools        latest     # ifconfig, iwconfig
+wireless-tools   latest     # iwconfig
+flask>=2.0.0
+hashcat          latest     # offline WPA cracking (future feature)
+hcxdumptool      latest     # PMKID capture (future feature)
+bettercap        latest     # advanced MITM (future feature)
