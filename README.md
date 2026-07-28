@@ -10,7 +10,7 @@
 <br>
 
 <p align="center">
-  <a href="https://github.com/Athexblackhat/GhostAP/Ghost-AP.png" alt="GhostAP Logo" width="200">
+  <a href="https://github.com/Athexblackhat/GhostAP"><img src="/Ghost-AP.png" alt="0" border="0" /></a>
 </p>
 
 <br>
