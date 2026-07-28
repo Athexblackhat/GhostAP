@@ -1,5 +1,3 @@
-<a href="https://github.com/Athexblackhat/GhostAP"><img src="/Ghost-AP.png" alt="0" border="0" /></a> 
-
 <p align="center">
   <img src="https://img.shields.io/badge/GhostAP-v1.0.0-e94560?style=for-the-badge&logo=ghost&logoColor=white" alt="GhostAP Version">
   <img src="https://img.shields.io/badge/Developer-ATHEX%20BLACK%20HAT-0a0a1a?style=for-the-badge" alt="Developer">
@@ -12,25 +10,10 @@
 <br>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/athex-blackhat/ghostap/main/assets/ghostap-logo.png" alt="GhostAP Logo" width="200">
+  <img src="https://github.com/Athexblackhat/GhostAP/Ghost-AP.png" alt="GhostAP Logo" width="200">
 </p>
 
 <br>
-
-<p align="center">
-  <samp>
-          ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗ █████╗ ██████╗ <br>
-         ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝██╔══██╗██╔══██╗<br>
-         ██║  ███╗███████║██║   ██║███████╗   ██║   ███████║██████╔╝<br>
-         ██║   ██║██╔══██║██║   ██║╚════██║   ██║   ██╔══██║██╔═══╝ <br>
-         ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║   ██║  ██║██║     <br>
-    &nbsp;╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝     <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;░█▀▀░█░█░█▀█░█▀▀░▀█▀░█▀█░█▀█<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;░█░█░█▀█░█▀█░▀▀█░░█░░█▀▀░█▀▀<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;░▀▀▀░▀░▀░▀░▀░▀▀▀░░▀░░▀░░░▀░░<br>
-  </samp>
-</p>
-
 <br>
 
 <p align="center">
