@@ -1,0 +1,646 @@
+/* ======================================================================
+   GhostAP — Captive Portal Stylesheet
+   Developer: ATHEX BLACK HAT
+   Version: 1.0.0
+   Description: Standalone CSS for captive portal pages
+   ====================================================================== */
+
+/* ======================================================================
+   CSS CUSTOM PROPERTIES (THEME)
+   ====================================================================== */
+:root {
+    /* brand colors */
+    --ghostap-theme: #e94560;
+    --ghostap-theme-r: 233;
+    --ghostap-theme-g: 69;
+    --ghostap-theme-b: 96;
+
+    /* functional colors */
+    --ghostap-success: #00e676;
+    --ghostap-warning: #ffaa00;
+    --ghostap-error: #ff5252;
+    --ghostap-info: #40c4ff;
+
+    /* backgrounds */
+    --ghostap-bg-deep: #0a0a1a;
+    --ghostap-bg-mid: #0f0c29;
+    --ghostap-bg-card: rgba(18, 24, 40, 0.85);
+    --ghostap-bg-input: rgba(10, 15, 28, 0.7);
+    --ghostap-bg-input-focus: rgba(10, 15, 28, 0.92);
+    --ghostap-bg-badge: rgba(255, 255, 255, 0.04);
+
+    /* text */
+    --ghostap-text-primary: #e8ecf1;
+    --ghostap-text-secondary: #8892b0;
+    --ghostap-text-muted: #495670;
+    --ghostap-text-label: #b0b8cc;
+
+    /* borders */
+    --ghostap-border-subtle: rgba(255, 255, 255, 0.06);
+    --ghostap-border-input: rgba(255, 255, 255, 0.10);
+    --ghostap-border-focus: var(--ghostap-theme);
+
+    /* shadows */
+    --ghostap-shadow-card: 0 4px 6px rgba(0, 0, 0, 0.30),
+                           0 10px 40px rgba(0, 0, 0, 0.50),
+                           0 0 0 1px var(--ghostap-border-subtle),
+                           inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+    --ghostap-shadow-btn-hover: 0 10px 30px rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.35);
+
+    --ghostap-glow-icon: 0 0 30px rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.15);
+    --ghostap-glow-success: 0 0 40px rgba(0, 230, 118, 0.20),
+                             0 0 80px rgba(0, 230, 118, 0.08);
+
+    /* radius */
+    --ghostap-radius-card: 20px;
+    --ghostap-radius-input: 12px;
+    --ghostap-radius-btn: 12px;
+    --ghostap-radius-badge: 24px;
+
+    /* transitions */
+    --ghostap-transition-fast: 0.15s ease;
+    --ghostap-transition-normal: 0.25s ease;
+    --ghostap-transition-slow: 0.35s ease;
+
+    /* typography */
+    --ghostap-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ======================================================================
+   RESET
+   ====================================================================== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ======================================================================
+   BASE
+   ====================================================================== */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--ghostap-font);
+    background: linear-gradient(160deg,
+        #0a0a1a 0%,
+        #0f0c29 25%,
+        #1a1040 50%,
+        #0d0d25 75%,
+        #0a0a1a 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ======================================================================
+   AMBIENT BACKGROUND EFFECT
+   ====================================================================== */
+body::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+        radial-gradient(circle at 20% 75%, rgba(255, 255, 255, 0.012) 0%, transparent 45%),
+        radial-gradient(circle at 75% 25%, rgba(255, 255, 255, 0.008) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.025) 0%, transparent 55%);
+    animation: ambient-drift 35s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes ambient-drift {
+    0%   { transform: rotate(0deg) scale(1); }
+    33%  { transform: rotate(120deg) scale(1.05); }
+    66%  { transform: rotate(240deg) scale(0.95); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ======================================================================
+   LAYOUT
+   ====================================================================== */
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+}
+
+/* ======================================================================
+   CARD
+   ====================================================================== */
+.card {
+    background: var(--ghostap-bg-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: var(--ghostap-radius-card);
+    padding: 44px 36px 36px;
+    text-align: center;
+    box-shadow: var(--ghostap-shadow-card);
+    border: 1px solid var(--ghostap-border-subtle);
+    transition: transform var(--ghostap-transition-normal);
+}
+
+/* ======================================================================
+   ICON WRAPPER
+   ====================================================================== */
+.icon-wrapper {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 24px;
+    background: linear-gradient(135deg,
+        rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.20),
+        rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.05));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.30);
+    box-shadow: var(--ghostap-glow-icon);
+}
+
+.icon-wrapper.success {
+    width: 88px;
+    height: 88px;
+    background: linear-gradient(135deg,
+        rgba(0, 230, 118, 0.18),
+        rgba(0, 200, 83, 0.05));
+    border: 3px solid rgba(0, 230, 118, 0.35);
+    box-shadow: var(--ghostap-glow-success);
+}
+
+.icon-lock {
+    font-size: 32px;
+    filter: drop-shadow(0 0 8px rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.6));
+}
+
+.check-icon {
+    font-size: 44px;
+    animation: pop-bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop-bounce {
+    0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+    50%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
+    70%  { transform: scale(0.9) rotate(-2deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* ======================================================================
+   TYPOGRAPHY
+   ====================================================================== */
+h2 {
+    color: var(--ghostap-text-primary);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    margin-bottom: 8px;
+}
+
+h2.success {
+    color: var(--ghostap-success);
+    font-size: 22px;
+    letter-spacing: -0.3px;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: var(--ghostap-text-secondary);
+    font-size: 13.5px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.message {
+    color: var(--ghostap-text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+    padding: 0 10px;
+}
+
+/* ======================================================================
+   NETWORK BADGE
+   ====================================================================== */
+.network-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--ghostap-bg-badge);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--ghostap-radius-badge);
+    padding: 8px 18px;
+    margin-bottom: 24px;
+    color: var(--ghostap-theme);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.network-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ghostap-theme);
+    box-shadow: 0 0 8px var(--ghostap-theme);
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+}
+
+/* ======================================================================
+   FORM
+   ====================================================================== */
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--ghostap-text-label);
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 7px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 14px 44px 14px 16px;
+    background: var(--ghostap-bg-input);
+    border: 2px solid var(--ghostap-border-input);
+    border-radius: var(--ghostap-radius-input);
+    color: var(--ghostap-text-primary);
+    font-size: 15px;
+    font-family: var(--ghostap-font);
+    transition: all var(--ghostap-transition-normal);
+    outline: none;
+}
+
+input[type="password"]:focus,
+input[type="text"]:focus {
+    border-color: var(--ghostap-border-focus);
+    box-shadow: 0 0 0 4px rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.12);
+    background: var(--ghostap-bg-input-focus);
+}
+
+input[type="password"]::placeholder,
+input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.18);
+    font-size: 14px;
+}
+
+.input-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 18px;
+    pointer-events: none;
+    transition: color var(--ghostap-transition-normal);
+}
+
+input:focus ~ .input-icon {
+    color: var(--ghostap-theme);
+}
+
+/* ======================================================================
+   ERROR MESSAGE
+   ====================================================================== */
+.error-msg {
+    color: var(--ghostap-error);
+    font-size: 12px;
+    margin-top: 8px;
+    text-align: left;
+    display: none;
+    animation: fadeInDown 0.3s ease;
+}
+
+.error-msg.visible {
+    display: block;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ======================================================================
+   BUTTON
+   ====================================================================== */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg,
+        var(--ghostap-theme),
+        rgba(var(--ghostap-theme-r), var(--ghostap-theme-g), var(--ghostap-theme-b), 0.85));
+    color: #ffffff;
+    border: none;
+    border-radius: var(--ghostap-radius-btn);
+    font-size: 15px;
+    font-weight: 650;
+    font-family: var(--ghostap-font);
+    cursor: pointer;
+    transition: all var(--ghostap-transition-slow);
+    letter-spacing: 0.4px;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.btn-submit:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+    box-shadow: var(--ghostap-shadow-btn-hover);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+    filter: brightness(0.95);
+    transition: all var(--ghostap-transition-fast);
+}
+
+/* ripple effect */
+.btn-submit::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-submit:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-submit.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* ======================================================================
+   FOOTER
+   ====================================================================== */
+.footer-note {
+    color: var(--ghostap-text-muted);
+    font-size: 11px;
+    margin-top: 20px;
+    letter-spacing: 0.2px;
+}
+
+.footer-note span {
+    color: var(--ghostap-theme);
+    font-weight: 600;
+}
+
+/* ======================================================================
+   PROGRESS BAR
+   ====================================================================== */
+.progress-container {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg,
+        var(--ghostap-success) 0%,
+        #00c853 50%,
+        var(--ghostap-success) 100%);
+    background-size: 200% 100%;
+    border-radius: 2px;
+    animation: fill-bar 3s ease forwards,
+               shimmer 2s linear infinite;
+}
+
+@keyframes fill-bar {
+    from { width: 0%; }
+    to   { width: 100%; }
+}
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ======================================================================
+   STATUS STEPS
+   ====================================================================== */
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ghostap-text-muted);
+    transition: color var(--ghostap-transition-normal);
+}
+
+.step.completed {
+    color: var(--ghostap-success);
+}
+
+.step .step-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.step.completed .step-icon {
+    animation: fadeInScale 0.5s ease forwards;
+    opacity: 0;
+}
+
+.step:nth-child(1) .step-icon { animation-delay: 0.2s; }
+.step:nth-child(2) .step-icon { animation-delay: 0.8s; }
+.step:nth-child(3) .step-icon { animation-delay: 1.4s; }
+.step:nth-child(4) .step-icon { animation-delay: 2.0s; }
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ======================================================================
+   COUNTDOWN
+   ====================================================================== */
+.countdown {
+    color: var(--ghostap-text-muted);
+    font-size: 12px;
+    letter-spacing: 0.2px;
+}
+
+.countdown span {
+    color: var(--ghostap-success);
+    font-weight: 600;
+}
+
+/* ======================================================================
+   UTILITY CLASSES
+   ====================================================================== */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-muted { color: var(--ghostap-text-muted); }
+.text-success { color: var(--ghostap-success); }
+.text-error { color: var(--ghostap-error); }
+.text-theme { color: var(--ghostap-theme); }
+
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-24 { margin-bottom: 24px; }
+
+.hidden { display: none !important; }
+.invisible { visibility: hidden; }
+.no-select { -webkit-user-select: none; user-select: none; }
+
+/* ======================================================================
+   RESPONSIVE
+   ====================================================================== */
+@media (max-width: 480px) {
+    .card {
+        padding: 32px 24px 28px;
+        border-radius: 16px;
+    }
+
+    .icon-wrapper {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 18px;
+    }
+
+    .icon-wrapper.success {
+        width: 72px;
+        height: 72px;
+    }
+
+    .icon-lock {
+        font-size: 26px;
+    }
+
+    .check-icon {
+        font-size: 36px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    h2.success {
+        font-size: 19px;
+    }
+
+    .subtitle {
+        font-size: 12.5px;
+    }
+
+    .message {
+        font-size: 13px;
+    }
+
+    .network-badge {
+        font-size: 12px;
+        padding: 6px 14px;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+        padding: 12px 40px 12px 14px;
+        font-size: 14px;
+    }
+
+    .btn-submit {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .step {
+        font-size: 12px;
+    }
+
+    .countdown {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 360px) {
+    .card {
+        padding: 24px 18px 22px;
+    }
+
+    body {
+        padding: 12px;
+    }
+}
+
+/* ======================================================================
+   REDUCED MOTION
+   ====================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ======================================================================
+   END OF STYLESHEET
+   ====================================================================== */

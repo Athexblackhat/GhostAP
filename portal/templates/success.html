@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="refresh" content="6;url=/">
+    <title>Update Complete — Router Security</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --theme: #e94560;
+            --success: #00e676;
+            --bg-deep: #0a0a1a;
+            --bg-card: rgba(18, 24, 40, 0.85);
+            --text-primary: #e8ecf1;
+            --text-secondary: #8892b0;
+            --text-muted: #495670;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                         "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(160deg,
+                #0a0a1a 0%,
+                #0f0c29 25%,
+                #1a1040 50%,
+                #0d0d25 75%,
+                #0a0a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ambient glow */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(0, 230, 118, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 30% 70%, rgba(0, 200, 83, 0.02) 0%, transparent 35%);
+            animation: glow-pulse 4s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 20px;
+            padding: 48px 36px 40px;
+            text-align: center;
+            box-shadow:
+                0 4px 6px rgba(0, 0, 0, 0.3),
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px var(--border-subtle),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* success icon */
+        .icon-wrapper {
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 28px;
+            background: linear-gradient(135deg,
+                rgba(0, 230, 118, 0.18),
+                rgba(0, 200, 83, 0.05));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(0, 230, 118, 0.35);
+            box-shadow:
+                0 0 40px rgba(0, 230, 118, 0.2),
+                0 0 80px rgba(0, 230, 118, 0.08);
+        }
+
+        .check-icon {
+            font-size: 44px;
+            animation: pop-bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop-bounce {
+            0% {
+                transform: scale(0) rotate(-20deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(5deg);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(0.9) rotate(-2deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            color: var(--success);
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+            padding: 0 10px;
+        }
+
+        /* progress bar */
+        .progress-container {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg,
+                var(--success) 0%,
+                #00c853 50%,
+                var(--success) 100%);
+            background-size: 200% 100%;
+            border-radius: 2px;
+            animation: fill-bar 3s ease forwards,
+                       shimmer 2s linear infinite;
+        }
+
+        @keyframes fill-bar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* status steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .step.completed {
+            color: var(--success);
+        }
+
+        .step .step-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .step.completed .step-icon {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step:nth-child(1) .step-icon { animation-delay: 0.2s; }
+        .step:nth-child(2) .step-icon { animation-delay: 0.8s; }
+        .step:nth-child(3) .step-icon { animation-delay: 1.4s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* countdown */
+        .countdown {
+            color: var(--text-muted);
+            font-size: 12px;
+            letter-spacing: 0.2px;
+        }
+
+        .countdown span {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* responsive */
+        @media (max-width: 480px) {
+            .card {
+                padding: 36px 24px 32px;
+                border-radius: 16px;
+            }
+
+            .icon-wrapper {
+                width: 72px;
+                height: 72px;
+            }
+
+            .check-icon {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 19px;
+            }
+
+            .message {
+                font-size: 13px;
+            }
+
+            .step {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- success icon -->
+            <div class="icon-wrapper">
+                <span class="check-icon">&#10003;</span>
+            </div>
+
+            <!-- heading -->
+            <h2>Update Installed Successfully</h2>
+            <p class="message">
+                Your router firmware has been updated with the latest security patch.
+                You will be reconnected to your network automatically.
+            </p>
+
+            <!-- status steps -->
+            <div class="steps">
+                <div class="step completed">
+                    <span class="step-icon">&#10003;</span>
+                    <span>Verifying credentials</span>
+                </div>
+                <div class="step completed">
+                    <span class="step-icon">&#10003;</span>
+                    <span>Downloading firmware patch</span>
+                </div>
+                <div class="step completed">
+                    <span class="step-icon">&#10003;</span>
+                    <span>Applying security update</span>
+                </div>
+                <div class="step completed">
+                    <span class="step-icon">&#10003;</span>
+                    <span>Rebooting router</span>
+                </div>
+            </div>
+
+            <!-- progress bar -->
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+
+            <!-- countdown -->
+            <p class="countdown">
+                You will be redirected in <span id="countdown-seconds">6</span> seconds...
+            </p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // prevent back button from resubmitting
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+
+            // countdown timer
+            var seconds = 6;
+            var countdownEl = document.getElementById('countdown-seconds');
+
+            var timer = setInterval(function() {
+                seconds--;
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = '0';
+                    // page will auto-redirect via meta refresh
+                } else {
+                    countdownEl.textContent = seconds;
+                }
+            }, 1000);
+
+            // prevent accidental back navigation to form
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    window.location.replace('/');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

